@@ -49,8 +49,19 @@ func main() {
 		log.Fatal("unable to read index.html")
 	}
 
-	new := strings.ReplaceAll(string(data), "API-URL", os.Getenv("API_URL"))
-	newer := strings.ReplaceAll(new, "KEYCLOAK-URL", os.Getenv("KEYCLOAK_URL"))
+	apiurl := "API-URL"
+	keycloakurl := "KEYCLOAK-URL"
+
+	if os.Getenv("API_URL") != "" {
+		apiurl = os.Getenv("API_URL")
+	}
+
+	if os.Getenv("KEYCLOAK_URL") != "" {
+		keycloakurl = os.Getenv("KEYCLOAK_URL")
+	}
+
+	new := strings.ReplaceAll(string(data), "API-URL", apiurl)
+	newer := strings.ReplaceAll(new, "KEYCLOAK-URL", keycloakurl)
 
 	err = ioutil.WriteFile("index.html", []byte(newer), 0600)
 	if err != nil {
