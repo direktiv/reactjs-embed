@@ -126,11 +126,6 @@ func main() {
 
 	indexHTML.ReadCloser = io.NopCloser(bytes.NewReader(indexHTML.Contents))
 
-	// err = ioutil.WriteFile("index.html", []byte(newer), 0600)
-	// if err != nil {
-	// 	log.Fatal("unable to write new index html file")
-	// }
-
 	handler := AssetHandler("/", "build")
 
 	srv := &http.Server{
