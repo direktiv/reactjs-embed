@@ -86,19 +86,9 @@ func AssetHandler(prefix, root string) http.Handler {
 		assetPath := path.Join(root, name)
 
 		f, err := Assets.Open(assetPath)
-		if os.IsNotExist(err) {
+		if os.IsNotExist(err) || strings.Contains(assetPath, "index.html") {
 
-			indexHTML := IndexFile{
-				Contents: []byte(indexString),
-			}
-
-			// if asset does not exist open index.html
-			return io.NopCloser(bytes.NewReader(indexHTML.Contents)), nil
-		}
-
-		// check if index.html is needed redirect to a different file?
-		if strings.Contains(assetPath, "index.html") {
-			indexHTML := IndexFile{
+			indexHTML := &IndexFile{
 				Contents: []byte(indexString),
 			}
 
