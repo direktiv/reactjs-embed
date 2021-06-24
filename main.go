@@ -88,12 +88,14 @@ func AssetHandler(prefix, root string) http.Handler {
 		f, err := Assets.Open(assetPath)
 		if os.IsNotExist(err) || strings.Contains(assetPath, "index.html") {
 
-			indexHTML := &IndexFile{
+			indexHTML := IndexFile{
 				Contents: []byte(indexString),
 			}
 
+			indexHTML.ReadCloser = io.NopCloser(bytes.NewReader(indexHTML.Contents))
+
 			// if asset does not exist open index.html
-			return io.NopCloser(bytes.NewReader(indexHTML.Contents)), nil
+			return &indexHTML, nil
 		}
 
 		return f, err
