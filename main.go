@@ -64,7 +64,9 @@ func (i *IndexFileInfo) Sys() interface{} {
 	return i.sys
 }
 
-var indexHTML IndexFile
+// var indexHTML IndexFile
+
+var indexString string
 
 func (index *IndexFile) Stat() (fs.FileInfo, error) {
 	fi := &IndexFileInfo{
@@ -85,13 +87,23 @@ func AssetHandler(prefix, root string) http.Handler {
 
 		f, err := Assets.Open(assetPath)
 		if os.IsNotExist(err) {
+
+			indexHTML = IndexFile{
+				Contents: []byte(newer),
+			}
+
 			// if asset does not exist open index.html
-			return &indexHTML, nil
+			return io.NopCloser(bytes.NewReader(indexHTML.Contents)), nil
 		}
 
 		// check if index.html is needed redirect to a different file?
 		if strings.Contains(assetPath, "index.html") {
-			return &indexHTML, nil
+			indexHTML = IndexFile{
+				Contents: []byte(newer),
+			}
+
+			// if asset does not exist open index.html
+			return io.NopCloser(bytes.NewReader(indexHTML.Contents)), nil
 		}
 
 		return f, err
@@ -118,13 +130,7 @@ func main() {
 	}
 
 	new := strings.ReplaceAll(string(data), "API-URL", apiurl)
-	newer := strings.ReplaceAll(new, "KEYCLOAK-URL", keycloakurl)
-
-	indexHTML = IndexFile{
-		Contents: []byte(newer),
-	}
-
-	indexHTML.ReadCloser = io.NopCloser(bytes.NewReader(indexHTML.Contents))
+	indexString = strings.ReplaceAll(new, "KEYCLOAK-URL", keycloakurl)
 
 	handler := AssetHandler("/", "build")
 
