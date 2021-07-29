@@ -127,8 +127,8 @@ func main() {
 	}
 
 	new := strings.ReplaceAll(string(data), "API-URL", apiurl)
-	index := strings.ReplaceAll(new, "GRAFANA-ENABLED", grafanaenabled)
-	indexString = strings.ReplaceAll(new, "KEYCLOAK-URL", keycloakurl)
+	indexString = strings.ReplaceAll(new, "GRAFANA-ENABLED", grafanaenabled)
+	indexString = strings.ReplaceAll(indexString, "KEYCLOAK-URL", keycloakurl)
 
 	handler := AssetHandler("/", "build")
 
