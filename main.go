@@ -112,6 +112,7 @@ func main() {
 
 	apiurl := "API-URL"
 	keycloakurl := "KEYCLOAK-URL"
+	grafanaenabled := "GRAFANA-ENABLED"
 
 	if os.Getenv("API_URL") != "" {
 		apiurl = os.Getenv("API_URL")
@@ -121,7 +122,12 @@ func main() {
 		keycloakurl = os.Getenv("KEYCLOAK_URL")
 	}
 
+	if os.Getenv("GRAFANA_ENABLED") != "" {
+		grafanaenabled = os.Getenv("GRAFANA-ENABLED")
+	}
+
 	new := strings.ReplaceAll(string(data), "API-URL", apiurl)
+	index := strings.ReplaceAll(new, "GRAFANA-ENABLED", grafanaenabled)
 	indexString = strings.ReplaceAll(new, "KEYCLOAK-URL", keycloakurl)
 
 	handler := AssetHandler("/", "build")
