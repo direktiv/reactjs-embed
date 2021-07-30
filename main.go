@@ -123,7 +123,7 @@ func main() {
 	}
 
 	if os.Getenv("GRAFANA_ENABLED") != "" {
-		grafanaenabled = os.Getenv("GRAFANA-ENABLED")
+		grafanaenabled = os.Getenv("GRAFANA_ENABLED")
 	}
 
 	new := strings.ReplaceAll(string(data), "API-URL", apiurl)
