@@ -13,7 +13,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/vorteil/direktiv/pkg/direktiv"
+	"github.com/vorteil/direktiv/pkg/util"
 )
 
 //go:embed build/*
@@ -140,12 +140,13 @@ func main() {
 		ReadTimeout:  15 * time.Second,
 	}
 
-	if _, err := os.Stat(direktiv.TLSCert); !os.IsNotExist(err) {
-		fmt.Println("starting server with TLS")
-		log.Fatal(srv.ListenAndServeTLS(direktiv.TLSCert, direktiv.TLSKey))
-	} else {
-		fmt.Println("starting server without TLS")
-		log.Fatal(srv.ListenAndServe())
+	k, c, _ := util.CertsForComponent(util.TLSHttpComponent)
+	if len(k) > 0 {
+		log.Printf("starting ui, tls enabled\n")
+		log.Fatal(srv.ListenAndServeTLS(c, k))
 	}
+
+	fmt.Println("starting ui\n")
+	log.Fatal(srv.ListenAndServe())
 
 }
