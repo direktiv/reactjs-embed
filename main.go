@@ -110,25 +110,7 @@ func main() {
 		log.Fatal("unable to read index.html")
 	}
 
-	apiurl := "API-URL"
-	keycloakurl := "KEYCLOAK-URL"
-	grafanaenabled := "GRAFANA-ENABLED"
-
-	if os.Getenv("API_URL") != "" {
-		apiurl = os.Getenv("API_URL")
-	}
-
-	if os.Getenv("KEYCLOAK_URL") != "" {
-		keycloakurl = os.Getenv("KEYCLOAK_URL")
-	}
-
-	if os.Getenv("GRAFANA_ENABLED") != "" {
-		grafanaenabled = os.Getenv("GRAFANA_ENABLED")
-	}
-
-	new := strings.ReplaceAll(string(data), "API-URL", apiurl)
-	indexString = strings.ReplaceAll(new, "GRAFANA-ENABLED", grafanaenabled)
-	indexString = strings.ReplaceAll(indexString, "KEYCLOAK-URL", keycloakurl)
+	indexString = string(data)
 
 	handler := AssetHandler("/", "build")
 
